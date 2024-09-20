@@ -38,16 +38,16 @@ select * from members;
 
 
 -- 5. Which item was the most popular for each customer?
-		with cte as (
-		select m.product_name, count(*) cnt,
-		row_number() over(order by count(*) desc) as rn
-		from sales s left join menu m
-		on s.product_id =m.product_id
-		group by m.product_name 
-		--order by cnt desc
-		) 
-
-		select product_name from cte where rn =1
+		select customer_id, product_name 
+		from (
+			select s.customer_id, m.product_name, count(*) as cnt,
+			dense_rank() over(partition by s.customer_id order by count(*) desc) rn
+			from sales s left join menu m 
+			on s.product_id =m.product_id
+			group by s.customer_id, m.product_name
+			--order by customer_id, count(*) desc
+			) a
+	where rn=1
 
 
 
