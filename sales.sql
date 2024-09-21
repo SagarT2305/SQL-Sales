@@ -38,7 +38,7 @@ select * from members;
 
 
 -- 5. Which item was the most popular for each customer?
-		select customer_id, product_name 
+		select customer_id, string_agg(product_name,',') as agg 
 		from (
 			select s.customer_id, m.product_name, count(*) as cnt,
 			dense_rank() over(partition by s.customer_id order by count(*) desc) rn
@@ -48,6 +48,7 @@ select * from members;
 			--order by customer_id, count(*) desc
 			) a
 	where rn=1
+	group by customer_id
 
 
 
