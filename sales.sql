@@ -80,9 +80,10 @@ select * from members;
 		left join menu m on s.product_id =m.product_id
 		where s.order_date < mm.join_date
 		)
-		select customer_id, product_name
+		select customer_id, string_agg(product_name,',') as product_name
 		from cte 
 		where rn=1
+		group by customeR_id
 		
 
 
